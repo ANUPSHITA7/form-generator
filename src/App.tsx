@@ -1,26 +1,30 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import {JsonEditor} from "./components/JsonEditor";
+import GeneratedForm from "./components/GeneratedForm";
+import { defaultSchema } from "./utils/constants";
 
-function App() {
+const App: React.FC = () => {
+  const [schema, setSchema] = useState(defaultSchema);
+  
+  const handleJsonChange = (newJson: any) => {
+    try {
+      // Safely update the schema
+      setSchema(newJson);
+    } catch (err) {
+      console.error("Invalid JSON", err);
+    }
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="flex flex-col md:flex-row gap-4 p-4">
+      <div className="w-full md:w-1/2">
+        <JsonEditor value={schema} onChange={handleJsonChange} />
+      </div>
+      <div className="w-full md:w-1/2">
+        <GeneratedForm schema={schema} />
+      </div>
     </div>
   );
-}
+};
 
 export default App;
